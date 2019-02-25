@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+        crossorigin="anonymous">
+        <!-- styles -->
+        <link rel="stylesheet" href="/static/css/style.css">
+
+    </head>
+    <body>
+    <br><br><br><br>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <div class="card">
+                <h4 class="card-header text-center">Login</h4>
+                <div class="card-block">
+                    <form method="post">
+                        <div class="form-group">
+                            <label class="label" style="font-size: 16px;">Email</label>
+                            <input name="email" id="email" type="email" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="label" style="font-size: 16px;">Password</label>
+                            <input name="password" id="password" type="password" class="form-control">
+                        </div>
+                        {% if error %}
+
+                            <div class="alert alert-danger">
+                                <a class="close" href="#" data-dismiss="alert">×</a>
+
+                                {{ error }}
+
+                            </div>
+                        {% endif %}
+                        <div class="mx-auto text-center">
+                            <input type="submit" value="Login" class="btn btn-primary">
+                        </div>
+                    </form><br><br>
+                    <p style="font-size: 16px;">Do not have an account yet?  <a href="/register">Please Register!</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </body>
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/js/custom.js"></script>
+</html>

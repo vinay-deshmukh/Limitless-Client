@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+        crossorigin="anonymous">
+        <!-- styles -->
+        <link rel="stylesheet" href="/static/css/style.css">
+
+    </head>
+    <body style='font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif'>
+    <br><br><br><br>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <div class="card">
+                <h4 class="card-header text-center">Register</h4>
+                <div class="card-block">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label style="font-size: 16px;">Username</label>
+                            <input name="username" type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 16px;">Email</label>
+                            <input name="email" type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 16px;">Password</label>
+                            <input name="pass" id="pass" type="password" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 16px;">Re-Enter Password</label>
+                            <input name="pass1" id="pass1" type="password" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 16px;">Add Credentials File: </label><br>
+                            <input type="file" id="creds" name="creds" class="input-group-addon" required>
+                        </div>
+                        {% if error %}
+
+                            <div class="alert alert-danger">
+                                <a class="close" href="#" data-dismiss="alert">×</a>
+
+                                {{ error }}
+
+                            </div>
+                        {% endif %}
+                        <div class="mx-auto text-center">
+                            <input type="submit" value="Register" class="btn btn-primary">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </body>
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js'"></script>
+    <script src="/staticjs/custom.js'"></script>
+</html>
