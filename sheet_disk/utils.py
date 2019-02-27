@@ -4,6 +4,9 @@ functions that are needed to access google sheets'''
 import threading, time
 from queue import Queue, Empty as queueEmpty
 from .my_logging import MyConsoleHandler, get_logger
+
+from . import limitless # To set progress status
+
 logger = get_logger()
 
 # Chars allowed in each cell
@@ -238,6 +241,10 @@ def thread_runner_factory(thread_list, data_count_queue, sheet_progress, total_c
             completed_cells += latest_done_cells
 
         msg = f_str.format(sh_cur, sh_total, prog, completed_cells, total_cells)
+
+        # set progress status
+        limitless.set_status(completed_cells, total_cells, sh_cur, sh_total)
+
         logger.info(msg)
 
         if not any( t.is_alive() for t in thread_list ):
@@ -261,6 +268,10 @@ def thread_runner_factory(thread_list, data_count_queue, sheet_progress, total_c
     MyConsoleHandler.restore_terminator()
     prog = '#' * length
     msg = f_str.format(sh_cur, sh_total, prog, completed_cells, total_cells)
+
+    # set progress status
+    limitless.set_status(completed_cells, total_cells, sh_cur, sh_total)
+
     logger.info(msg)
 
     logger.debug("All threads are aliven't!")
