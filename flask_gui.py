@@ -1,8 +1,16 @@
-from flask import Flask, render_template, request, redirect, Response
+from flask import Flask, render_template, request, redirect, Response, jsonify
+import time
+import os
 import sys
 import json
 import requests
 import hashlib
+import threading
+from sheet_disk.limitless import Progress
+
+'''
+sheet-disk@sheet-disk-230910.iam.gserviceaccount.com
+'''
 
 sys.path.insert(0, "/home/rishabh/Downloads/Sheet-Disk-master")
 sheet_disk_path = '../sheet_disk/cli.py'
@@ -17,6 +25,8 @@ from sheet_disk.sheet_disk import main
 oauth_json = None
 auth_dict = None
 all_files = None
+
+progress_bool = False
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -37,11 +47,10 @@ def index():
             oauth_json = json.loads(response.json())['oauth_json_string']
             print('Type: ', type(oauth_json))
             response1 = requests.post(BASE_URL + '/get_files', data={'auth_dict': auth_dict})
-            print(response1.text, 'odowid')
             global all_files
             all_files = json.loads(json.loads(response1.text))
 
-            return render_template('views/gui.html', all_files=all_files, len=len(all_files))
+            return render_template('views/progress_bar.html', all_files=all_files, len=len(all_files))
         else:
             print(response)
             error = 'Not authenticated'
@@ -53,35 +62,39 @@ def index():
 @app.route('/upload', methods=['POST', 'GET'])
 def upload():
     if request.method == 'POST':
-        file = request.files['upload_button']
-        data = file.read()
-        print(dir(file))
-        with open(file.filename, 'wb') as f:
-            f.write(data)
-        raw_args = ['upload', file.filename]
+        global progress_bool
+        if not progress_bool:
+            file = request.form['file_upload']
+            receivers = request.form['receivers']
+            receivers = receivers.split(';')
+            print(file)
+            progress_bool = True
+            file_path = os.path.abspath(file)
+            raw_args = ['upload', file_path]
 
-        main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=[
-            'sheet-disk@sheet-disk-230910.iam.gserviceaccount.com'
-        ])
-        json_str = None
-        with open(file.filename+'.json', 'r') as f:
-            json_str = f.read()
+            main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
+            json_str = None
+            with open(file+'.json', 'r') as f:
+                json_str = f.read()
 
-        data = {
-            'auth_dict': auth_dict,
-            'json_str': json_str
-        }
-        print(data)
-        response = requests.post(url=BASE_URL+'/upload', data=data)
+            data = {
+                'auth_dict': auth_dict,
+                'json_str': json_str
+            }
+            print(data)
+            response = requests.post(url=BASE_URL+'/upload', data=data)
 
-        messages = 'failed'
-        print("status_code  ", response.status_code)
-        print("json ", response.json())
-        if response.status_code == 200:
-            messages = 'Successful'
-            print('Login')
+            messages = 'failed'
+            print("status_code  ", response.status_code)
+            print("json ", response.json())
+            if response.status_code == 200:
+                messages = 'Successful'
+                print('Login')
+            return render_template('views/progress_bar.html', messages=messages)
+        else:
+            prog = Progress().percent()
+            return jsonify(progress=prog)
             
-        return render_template('views/gui.html', messages=messages)
 
 
 def hash_data(d):
@@ -104,12 +117,12 @@ def download():
 
 @app.route('/register', methods=['POST', 'GET'])
 def signup():
-    print('sognup')
+    print('signup')
     if request.method == 'POST':
         email = request.form['email']
         pass1 = request.form['pass']
         pass2 = request.form['pass1']
-        json_data = request.files['creds']
+        json_data = request.files['credentials']
         print('Hello')
         if pass1 == pass2:
             try:
@@ -136,4 +149,3 @@ def signup():
 
 if __name__ == '__main__':
     app.run(host=ROOT, port=PORT, debug=True)
-    print('thwt')

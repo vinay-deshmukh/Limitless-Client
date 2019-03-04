@@ -1,125 +1,306 @@
 <!DOCTYPE html>
-<html>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link type="text/css" rel="stylesheet" href="static/css/bg.css">
+    <link type="text/css" rel="stylesheet" href="static/css/login-signup.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(document).on('ready',function(){
+            $("#file_upload").change(function(){
+                var file_name = $('#file_upload')[0].files[0].name;
+                console.log(file_name);
+                $("#file_upload_name").val(file_name);
 
-    <style>
-        tr:nth-child(odd) {background-color: #f0f0f0;}
-        tr:nth-child(even) {background-color: lightgrey;}
-        td, th{
-            padding: 8px;
-        }
-        .upload-btn-wrapper {
-            position: relative;
+
+            });
+        });
+    </script>
+    <style type="text/css">
+        html,body{
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
             overflow: hidden;
+        }
+        #main-container{
+            width: calc(100vw - 50px);
+            height: calc(100vh - 302px);
+            padding: 25px;
+            position: fixed;
+            top: 254px;
+            left: 0;
+            display: flex;
+            background-color: transparent;
+            z-index: 2;
+            float: left;
+        }
+        h2{
+            height: 56px;
+            position: fixed;
+            top: 190px;
+            left: 50px;
+            padding: 0;
+            margin: 0;
+            color: #fff;
+            font-size: 54px;
+            font-family: 'AvenirNext-Regular';
+            z-index: 2;
+            float: left;
+        }
+        #main-container h2:not(:first-child){
+            flex: 1;
+        }
+        #left-section{
+            flex: 3;
+            margin-right: 20px;
+            border-radius: 15px;
+            background-image: linear-gradient(90deg, rgba(109,201,204,0.5) 0%, rgba(108,196,202,0.5) 18%, rgba(105,182,198,0.5) 39%, rgba(101,158,191,0.5) 61%, rgba(94,125,181,0.5) 84%, rgba(89,99,172,0.5) 100%);
+            overflow-y: scroll;
+            float: left;
+        }
+        #left-section table{
+            padding: 10px;
+            width: calc(100% - 10px);
+            height: 1000px;
+        }
+        #left-section table tbody{
+            width: 100%;
+            height: auto;
+            margin: 0;
+            padding: 0;
+        }
+        #left-section table tbody tr{
+            margin-top: 8px;
+            padding: 0;
+            width: 100%;
+            height: 50px !important;
+            display: inline-block;
+            background-image: linear-gradient(90deg, rgba(109,201,204,1) 0%, rgba(108,196,202,1) 18%, rgba(105,182,198,1) 39%, rgba(101,158,191,1) 61%, rgba(94,125,181,1) 84%, rgba(89,99,172,1) 100%);
+            box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.15), -5px 5px 10px 0 rgba(0, 0, 0, 0.15);
+        }
+        #left-section table tbody tr:first-child{
+            border-top-left-radius:  10px;
+            border-top-right-radius: 10px;
+        }
+        #left-section table tbody tr:last-child{
+            border-bottom-left-radius:  10px;
+            border-bottom-right-radius: 10px;
+        }
+        tbody tr td{
+            width: 100%;
             display: inline-block;
         }
-
-        .btn {
-            cursor: pointer;
-            font: bold 20px Roboto;
-            text-decoration: none;
-            background-color: #EEEEEE;
-            color: #333333;
-            padding: 8px 6px 5px 6px;
-            border-top: 1px solid #CCCCCC;
-            border-right: 1px solid #333333;
-            border-bottom: 1px solid #333333;
-            border-left: 1px solid #CCCCCC;
-            border-radius: 10px;
-            margin-top: 10px;
+        tbody tr span{
+            padding-top: 10px;
+            margin-left: 8px;
+            width: 80%;
+            height: 40px;
+            color: #0C2E3A;
+            font-family: 'AvenirNext-Regular';
+            font-size: 24px;
+            float: left
         }
-
-        .upload-btn-wrapper input[type=file] {
-            font-size: 100px;
-            position: absolute;
-            left: 0;
-            top: 0;
+        tbody tr button{
+            margin-top: 6px;
+            margin-right: 16px;
+            width: 36px;
+            height: 36px;
+            display: inline-block;
+            float: right;
+            border: none;
+            outline: none;
+            background-color: transparent;
+            background-image: url(static/assets/download-icon.svg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            cursor: pointer;
+        }
+        #right-section{
+            flex: 1;
+            border-radius: 15px;
+            background-image: linear-gradient(90deg, rgba(109,201,204,0.5) 0%, rgba(108,196,202,0.5) 18%, rgba(105,182,198,0.5) 39%, rgba(101,158,191,0.5) 61%, rgba(94,125,181,0.5) 84%, rgba(89,99,172,0.5) 100%);
+            float: left;
+        }
+        #right-section #content-div{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url(static/assets/bg-2.svg);
+            background-repeat: no-repeat;
+            background-position: top;
+        }
+        #file{
+            width: 160px;
+            height: 160px;
+            padding: 60px calc(calc(100% - 160px) / 2) 0;
+            float: left;
+        }
+        #file input[type="file"]{
+            width: 160px;
+            height: 140px;
             opacity: 0;
+            color: transparent;
+            border-bottom: 3px #0C2E3A solid;
         }
-
-        .download_svg{
-            height:30px;
-            width:30px;
-            cursor: pointer;
+        #file input[type="file"] ~ label{
+            width: 160px;
+            height: 140px;
+            margin-top: -140px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url(static/assets/upload-icon.svg);
+            background-size: cover;
+            font-size: 20px;
+            color: #0C2E3A;
+            opacity: 1;
         }
-
-        .header{
-            color: #ffffff;
-            font: Roboto;
-            font-size: 40px;
-            
-
+        #file input[type="file"]:focus ~ label,
+        #file input[type="file"]:valid ~ label{
+            font-size: 20px;
+            opacity: 1;
+            color: #0C2E3A;
         }
-
+        #file input[type="file"] ~ label span{
+            padding: 4px 8px;
+            color: #0C2E3A;
+            font-size: 24px;
+            font-family: 'AvenirNext-Regular';
+            background-color: rgba(255,200,202,1);
+        }
+        .input-box{
+            width: 100%;
+            position: relative;
+            float: left;
+        }
+        .input-box input{
+            margin: 16px 20px; 
+            width: calc(100% - 40px);
+            height: 40px;
+            border: none;
+            outline: none;
+            letter-spacing: 1px;
+            font-size: 20px; 
+            font-family: 'AvenirNext-Regular';
+            background-color: transparent;
+            border-bottom: 3px #0C2E3A solid;
+        }
+        .input-box:first-child input{
+            margin-top: 32px;
+        }
+        .input-box label{
+            position: absolute;
+            top: 0;
+            left: 20px;
+            color: #006165;
+            font-size: 20px;
+            font-family: 'AvenirNext-Regular';
+            opacity: 0.65;
+            padding-top: 24px;
+            pointer-events: none;
+            transition: 0.5s;
+        }
+        .input-box input:focus ~ label,
+        .input-box input:valid ~ label{
+            top: -28px;
+            font-size: 16px;
+            opacity: 1;
+            color: #0C2E3A;
+        }
+        #right-section #content-div button{
+            margin: 16px calc(calc(100% - 160px) / 2) 0;
+            padding: 0 ;
+            width: 160px;
+            height: 56px;
+            border: none;
+            outline: none;
+            opacity: 0.65;
+            color: #0C2E3A;
+            font-size: 24px; 
+            background-color: rgba(255,200,202,1);
+            transition: all 0.5s ease;
+        }
+        #right-section #content-div button:hover{
+            opacity: 1.0;
+            transform: scale(1.05);
+            box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.25), -5px 5px 10px 0 rgba(0, 0, 0, 0.25);
+        }
     </style>
+</head>
 <body>
-
-    <div style="height: 15%;  background-color: black; margin-bottom: 5px" name="header" >
-    <!-- Header of the application with logo and some options -->
-        <span class="header"> Secure Share </span>
-    </div>
-    <div name="bottom content" style="width:100%; overflow: hidden;">
-        <div name="left section" style=" align-content: center; margin-top: 10px;s   width:80%; height: 70%; float: left;" >
-            <table width="100%" style="border-collapse: collapse" border="8">
-                <tr >
-                    <th>File Name</th>
-                    <th width="10%">Download</th>
-                </tr>
-                
-                {% if all_files %}
-                    {% for idx in range(len)  %}
-
-                        <form method="get" action="/download">
-                            <input type="hidden" name="id" value={{idx}}>
-                            <tr>
-                                <td>{{ all_files[idx]['name'] }}</td>
-                                <td>
-                                    <input type="submit" value="Download">
-                                </td>
-                            </tr>
-                        </form>
-                    {% endfor %}
-                {% endif %}
-
-            </table>
-        </div >
-        <div name="right section" style=" align-content: center; height: 84%; margin-left: 65%;  margin-top: 1%;">
-            <form name="upload" method="post" enctype="multipart/form-data" action="/upload">
-                <label  style="margin-top: 40px; font-size: 25px; font-family: Roboto;">Upload File</label><br>
-                <input type="file" id="upload_button" name="upload_button" style="margin-top: 10px; font-size: 25px;" required >
-                {% if messages %}
-                    <div>
-                        {{ messages }}
-                    </div>
-                {% endif %}<br>
-                <input type="submit" name="submit" id="submit" value="submit" style="margin-top: 10%; font-size: 20px;">
-                <div class="progress" style="width: 50%; margin: 50px;">
-                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                        <span class="progress-bar-label">{{ progress }}%</span>
-                    </div>
-                </div>
-            </form>
+    <div id="left-corner-design"></div>
+    
+    <header>
+        <div id="header-content">
+            <h1>limitless</h1>
+            <img src="static/assets/logo.svg">
         </div>
+    </header>
+    <h2>Inbox</h2>
+    
+    <div id="main-container">
+        <section id="left-section">
+            <table>
+                <tbody>
+                    <tr>
+                        <td><span>File name</span><button><!-- download --></button></td>
+                    </tr>
+                    <tr>
+                        <td><span>File name</span><button><!-- download --></button></td>
+                    </tr>
+                    <tr>
+                        <td><span>File name</span><button type="submit" ><!-- download --></button></td>
+                    </tr>
+                    {% if all_files %}
+                        {% for idx in range(len) %}
+                            <form method="get" action="/download">
+                                <input type="hidden" name="id" value={{idx}}>
+                                <tr>
+                                    <td>
+                                        {{ all_files[idx]['name'] }}
+                                        <button type="submit"></button>
+                                    </td>
+                                </tr>
+                            </form>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </section>
+        
+        <section id="right-section">
+            <div id="content-div">
+                <form name="upload_form" method="post" action="/upload">
+                    <div id="file">
+                        <input type="file" size="200px" name="file_upload" id="file_upload" required>
+                        <label><span>Upload</span></label>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" name="file_upload_name" id="file_upload_name" placeholder="file name" disabled>
+                        <label id=""></label>
+                    </div>
+                    <div class="input-box">
+                        <input type="email" name="receivers" id="receivers" required>
+                        <label>Email ID</label>
+                    </div>
+                    <button type="submit">Submit</button>
+                    {% block progress %}
+                    {% endblock %}
+                </form>
+                
+            </div>
+        </section>
     </div>
-
+    
+    <div id="right-corner-design">
+    </div>
 </body>
-
-    <script>
-        var source = new EventSource("/progress");
-        source.onmessage = function(event) {
-            $('.progress-bar').css('width', event.data+'%').attr('aria-valuenow', event.data);
-            $('.progress-bar-label').text(event.data+'%');
-            if(event.data == 100){
-                source.close()
-            }
-        }
-    </script>
 </html>
-
-
-
-
-
-

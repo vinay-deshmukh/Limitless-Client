@@ -1,63 +1,104 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Bootstrap -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
-        crossorigin="anonymous">
-        <!-- styles -->
-        <link rel="stylesheet" href="/static/css/style.css">
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link type="text/css" rel="stylesheet" href="static/css/bg.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="static/css/login-signup.css">
+	<script type="text/javascript">
+		$(document).on('ready', function(){
+			$("#credentials").change(function(){
+				var file_name = $('#credentials')[0].files[0].name;
+				console.log(file_name);
+				$("#creds_name").text(file_name);
+			});
+		});
+	</script>
+	<style type="text/css">
+		html,body{
+			width: 100vw;
+			height: 100vh;
+			margin: 0;
+			padding: 0;	
+		}
+		#center-container{
+			height: 640px
+		}
+		#file{
+			margin-top: 16px;
+		}
+		#file input[type="file"]{
+			opacity: 0;
+			color: transparent;
+			border-bottom: 3px #0C2E3A solid;
+		}
+		#file input[type="file"] ~ label{
+			width: 160px;
+			height: 50px;
+			padding: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #0C2E3A;
+			transition: 0.0s;
+			opacity: 1;
+			border: 3px #0C2E3A solid;
+		}
+		#file input[type="file"]:focus ~ label,
+		#file input[type="file"]:valid ~ label{
+			top: 0;
+			font-size: 20px;
+			opacity: 1;
+			color: #0C2E3A;
+		}
+		
+	</style>
+</head>
+<body>
+	<div id="left-corner-design"></div>
+	
+	<header>
+		<div id="header-content">
+			<h1>limitless</h1>
+			<img src="static/assets/logo.svg">
+		</div>
+	</header>
+	
+	<secttion id="center-container">
+		<div id="box-container">
+			<h2>Sign Up</h2>
+			<form method="post" enctype="multipart/form-data">
+				<div class="input-box">
+					<input type="text" name="username" id="username" required>
+					<label>Name</label>
+				</div>
+				<div class="input-box">
+					<input type="email" name="email" id="email" required>
+					<label>Email</label>
+				</div>
+				<div class="input-box">
+					<input type="password" name="pass" id="pass" required>
+					<label>Password</label>
+				</div>
+				<div class="input-box">
+					<input type="password" name="pass1" id="pass1" required>
+					<label>Re-password</label>
+				</div>
+				<div class="input-box" id="file">
+					<div>
+						<input type="file" size="200px" name="credentials" id="credentials" required>
+						<label>Choose a file</label>
+					</div>
+					<div name="creds_name" id="creds_name"></div>
+				</div>
 
-    </head>
-    <body style='font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif'>
-    <br><br><br><br>
-    <div class="row justify-content-center">
-        <div class="col-4">
-            <div class="card">
-                <h4 class="card-header text-center">Register</h4>
-                <div class="card-block">
-                    <form method="post" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label style="font-size: 16px;">Username</label>
-                            <input name="username" type="text" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label style="font-size: 16px;">Email</label>
-                            <input name="email" type="text" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label style="font-size: 16px;">Password</label>
-                            <input name="pass" id="pass" type="password" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label style="font-size: 16px;">Re-Enter Password</label>
-                            <input name="pass1" id="pass1" type="password" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label style="font-size: 16px;">Add Credentials File: </label><br>
-                            <input type="file" id="creds" name="creds" class="input-group-addon" required>
-                        </div>
-                        {% if error %}
-
-                            <div class="alert alert-danger">
-                                <a class="close" href="#" data-dismiss="alert">×</a>
-
-                                {{ error }}
-
-                            </div>
-                        {% endif %}
-                        <div class="mx-auto text-center">
-                            <input type="submit" value="Register" class="btn btn-primary">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    </body>
-
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="/static/bootstrap/js/bootstrap.min.js'"></script>
-    <script src="/staticjs/custom.js'"></script>
+				<button type="submit">Sign Up</button>
+				<a href="/">Login</a>
+			</form>
+		</div>
+	</secttion>
+	
+	<div id="right-corner-design"></div>
+</body>
 </html>
