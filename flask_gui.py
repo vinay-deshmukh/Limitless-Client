@@ -6,7 +6,7 @@ import json
 import requests
 import hashlib
 import threading
-from sheet_disk.limitless import Progress
+from sheet_disk.limitless import get_status
 
 '''
 sheet-disk@sheet-disk-230910.iam.gserviceaccount.com
@@ -62,38 +62,39 @@ def index():
 @app.route('/upload', methods=['POST', 'GET'])
 def upload():
     if request.method == 'POST':
-        global progress_bool
-        if not progress_bool:
-            file = request.form['file_upload']
-            receivers = request.form['receivers']
-            receivers = receivers.split(';')
-            print(file)
-            progress_bool = True
-            file_path = os.path.abspath(file)
-            raw_args = ['upload', file_path]
+        #global progress_bool
+        #if not progress_bool:
+        file = request.form['file_upload']
+        receivers = request.form['receivers']
+        receivers = receivers.split(';')
+        print(file)
+        progress_bool = True
+        file_path = os.path.abspath(file)
+        raw_args = ['upload', file_path]
 
-            main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
-            json_str = None
-            with open(file+'.json', 'r') as f:
-                json_str = f.read()
+        main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
+        json_str = None
+        with open(file+'.json', 'r') as f:
+            json_str = f.read()
 
-            data = {
-                'auth_dict': auth_dict,
-                'json_str': json_str
-            }
-            print(data)
-            response = requests.post(url=BASE_URL+'/upload', data=data)
+        data = {
+            'auth_dict': auth_dict,
+            'json_str': json_str
+        }
+        print(data)
+        response = requests.post(url=BASE_URL+'/upload', data=data)
 
-            messages = 'failed'
-            print("status_code  ", response.status_code)
-            print("json ", response.json())
-            if response.status_code == 200:
-                messages = 'Successful'
-                print('Login')
-            return render_template('views/progress_bar.html', messages=messages)
-        else:
-            prog = Progress().percent()
-            return jsonify(progress=prog)
+        messages = 'failed'
+        print("status_code  ", response.status_code)
+        print("json ", response.json())
+        if response.status_code == 200:
+            messages = 'Successful'
+            print('Login')
+        print(get_status().percent())
+        return render_template('views/progress_bar.html', messages=messages)
+        #else:
+            #prog = Progress().percent()
+            #return jsonify(progress=prog)
             
 
 
