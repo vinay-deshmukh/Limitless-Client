@@ -59,29 +59,59 @@ def index():
     return render_template('views/login.html')
 
 
+@app.route('/progress', methods=['GET'])
+def progress():
+	return jsonify(progress=request.args.get('prog'))
+
+
+def start_upload(oauth_json, raw_args, receivers):
+	main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
+
+
+def get_progress():
+	prog = 0
+	while True:
+		prog = int(get_status().percent())
+		print(prog)
+		if prog == 100:
+			break
+		requests.get(url=BASE_URL+'/progress' + '?prog=' + str(int(prog)))
+
+
 @app.route('/upload', methods=['POST', 'GET'])
 def upload():
     if request.method == 'POST':
         #global progress_bool
         #if not progress_bool:
-        file = request.form['file_upload']
+        file = request.files['file_upload']
         receivers = request.form['receivers']
+        data = file.read()
+        print(dir(file))
+        with open(file.filename, 'wb') as f:
+            f.write(data)
         receivers = receivers.split(';')
-        print(file)
         progress_bool = True
-        file_path = os.path.abspath(file)
-        raw_args = ['upload', file_path]
+        #file_path = os.path.abspath(file)
+        raw_args = ['upload', file.filename]
 
-        main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
+        t1 = threading.Thread(target=start_upload, args=(oauth_json, raw_args, receivers))
+        t2 = threading.Thread(target=get_progress)
+        print('a')
+        t2.start()
+        print('b')        
+        t1.start()
+        print('c')
+        t1.join() 
+        print('d')       
+        t2.join()
         json_str = None
-        with open(file+'.json', 'r') as f:
+        with open(file.filename +'.json', 'r') as f:
             json_str = f.read()
 
         data = {
             'auth_dict': auth_dict,
             'json_str': json_str
         }
-        print(data)
         response = requests.post(url=BASE_URL+'/upload', data=data)
 
         messages = 'failed'
@@ -90,7 +120,7 @@ def upload():
         if response.status_code == 200:
             messages = 'Successful'
             print('Login')
-        print(get_status().percent())
+        #print(get_status().percent())
         return render_template('views/progress_bar.html', messages=messages)
         #else:
             #prog = Progress().percent()
