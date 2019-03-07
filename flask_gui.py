@@ -64,8 +64,19 @@ def progress():
 	return jsonify(progress=request.args.get('prog'))
 '''
 
-def start_upload(oauth_json, raw_args, receivers):
-	main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
+def start_upload(oauth_json, raw_args, receivers, data):
+    main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
+
+    response = requests.post(url=BASE_URL+'/upload', data=data)
+
+    messages = 'failed'
+    print("status_code  ", response.status_code)
+    print("json ", response.json())
+    if response.status_code == 200:
+        messages = 'Successful'
+        print('Login')
+
+
 
 
 def get_progress():
@@ -76,6 +87,14 @@ def get_progress():
 		if prog == 100:
 			break
 		#requests.get(url=BASE_URL+'/upload' + '?prog=' + str(int(prog)))
+
+@app.route('/real_progress', methods=['POST'])
+def real_progress():
+    print('=' * 50)
+    a = int(get_status().percent())
+    print('Progress:', a)
+    print('=' * 50)
+    return str(a)
 
 
 @app.route('/upload', methods=['POST', 'GET'])
@@ -94,16 +113,6 @@ def upload():
         #file_path = os.path.abspath(file)
         raw_args = ['upload', file.filename]
 
-        t1 = threading.Thread(target=start_upload, args=(oauth_json, raw_args, receivers))
-        t2 = threading.Thread(target=get_progress)
-        print('a')
-        t1.start()
-        print('b')        
-        t2.start()
-        print('c')
-        t1.join() 
-        print('d')       
-        t2.join()
         json_str = None
         with open(file.filename +'.json', 'r') as f:
             json_str = f.read()
@@ -112,16 +121,21 @@ def upload():
             'auth_dict': auth_dict,
             'json_str': json_str
         }
-        response = requests.post(url=BASE_URL+'/upload', data=data)
 
-        messages = 'failed'
-        print("status_code  ", response.status_code)
-        print("json ", response.json())
-        if response.status_code == 200:
-            messages = 'Successful'
-            print('Login')
+        t1 = threading.Thread(target=start_upload, args=(oauth_json, raw_args, receivers, data))
+        # t2 = threading.Thread(target=get_progress)
+        print('a')
+        ####t1.start() # moving it wayy down
+        print('b')        
+        #### t2.start() # moving way down
+        print('c')
+        # t1.join() 
+        print('d')       
+        # t2.join()
+        
+        t1.start()
         #print(get_status().percent())
-        return render_template('views/progress_bar.html', messages=messages)
+        return render_template('views/progress_bar.html', messages='ffff')
         #else:
             #prog = Progress().percent()
             #return jsonify(progress=prog)

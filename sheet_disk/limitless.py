@@ -37,7 +37,7 @@ class Progress:
 
 
 # Global variable that will be updated as every progress message is printed
-LATEST_STATUS = Progress(0,10,1,100) # -1's indicate uninitialized
+LATEST_STATUS = Progress(1000, 1000, 1, 5) #0,10,1,100) # -1's indicate uninitialized
 
 def set_status(cells_done, total_cells, 
                current_sheet, total_sheets):
@@ -50,7 +50,7 @@ def get_status():
     Call this function to get the progress of the upload/download
     Note: caller of this function should keep track whether he is uploading or downloading
     '''
-
+    #global LATEST_STATUS
     return LATEST_STATUS
 
 def test_percent():
