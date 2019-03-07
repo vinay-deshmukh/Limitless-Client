@@ -58,11 +58,11 @@ def index():
         print('Login')
     return render_template('views/login.html')
 
-
-@app.route('/progress', methods=['GET'])
+'''
+@app.route('/upload/progress', methods=['GET'])
 def progress():
 	return jsonify(progress=request.args.get('prog'))
-
+'''
 
 def start_upload(oauth_json, raw_args, receivers):
 	main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
@@ -72,10 +72,10 @@ def get_progress():
 	prog = 0
 	while True:
 		prog = int(get_status().percent())
-		print(prog)
+		#print(prog)
 		if prog == 100:
 			break
-		requests.get(url=BASE_URL+'/progress' + '?prog=' + str(int(prog)))
+		#requests.get(url=BASE_URL+'/upload' + '?prog=' + str(int(prog)))
 
 
 @app.route('/upload', methods=['POST', 'GET'])
@@ -97,9 +97,9 @@ def upload():
         t1 = threading.Thread(target=start_upload, args=(oauth_json, raw_args, receivers))
         t2 = threading.Thread(target=get_progress)
         print('a')
-        t2.start()
-        print('b')        
         t1.start()
+        print('b')        
+        t2.start()
         print('c')
         t1.join() 
         print('d')       
@@ -125,6 +125,9 @@ def upload():
         #else:
             #prog = Progress().percent()
             #return jsonify(progress=prog)
+
+    if request.method == 'GET':
+    	return jsonify(progress=request.args.get('prog'))
             
 
 
