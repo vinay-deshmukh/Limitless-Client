@@ -6,17 +6,43 @@
     <link type="text/css" rel="stylesheet" href="static/css/bg.css">
     <link type="text/css" rel="stylesheet" href="static/css/login-signup.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script type="text/javascript">
         $(document).on('ready',function(){
             $("#file_upload").change(function(){
                 var file_name = $('#file_upload')[0].files[0].name;
                 console.log(file_name);
                 $("#file_upload_name").val(file_name);
-
-
             });
+            /*
+            $('#upload_form').submit(function(e){
+                e.preventDefault();
+
+                var interval = null;
+                var data = {
+                    'file_upload': $("#file_upload_name").val();
+                    'receivers': $("#receivers").val();
+                }
+                progress = setInterval(updateProgressBar, 1000);
+
+                function updateProgressBar(){
+                    $.ajax({
+                        type: 'POST',
+                        url: '/upload',
+                        data: data                        
+                    }).done(function(callback){
+                            console.log(callback);
+                            if (callback.written_content == "100"){
+                                clearInterval(progress);
+                            }
+                            // Watch out for Cross Site Scripting security issues when setting dynamic content!
+                            $('.progress-bar').css('width', callback.written_content+'%').attr('aria-valuenow', callback.written_content);
+                            $('.progress-bar-label').text(callback.written_content+'%');
+                            clearInterval(progress);
+                    }).fail(function(data){
+                            alert('error!');
+                    });
+                }
+            });*/
         });
     </script>
     <style type="text/css">
@@ -233,6 +259,36 @@
             transform: scale(1.05);
             box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.25), -5px 5px 10px 0 rgba(0, 0, 0, 0.25);
         }
+        progress {
+            display: block; /* default: inline-block */
+            width: 300px;
+            margin: 2em auto;
+            padding: 4px;
+            border: 0 none;
+            background: #444;
+            border-radius: 14px;
+            box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);
+        }
+        progress::-moz-progress-bar {
+            border-radius: 12px;
+            background: #FFF;
+            box-shadow: inset 0 -2px 4px rgba(0,0,0,0.4), 0 2px 5px 0px rgba(0,0,0,0.3);
+
+        }
+        /* webkit */
+        @media screen and (-webkit-min-device-pixel-ratio:0) {
+        progress {
+            height: 25px;
+        }
+        }
+        progress::-webkit-progress-bar {
+            background: transparent;
+        }  
+        progress::-webkit-progress-value {  
+            border-radius: 12px;
+            background: #FFF;
+            box-shadow: inset 0 -2px 4px rgba(0,0,0,0.4), 0 2px 5px 0px rgba(0,0,0,0.3); 
+        }
     </style>
 </head>
 <body>
@@ -240,7 +296,7 @@
     
     <header>
         <div id="header-content">
-            <h1>limitless</h1>
+            <h1>Limitless</h1>
             <img src="static/assets/logo.svg">
         </div>
     </header>
@@ -278,7 +334,7 @@
         
         <section id="right-section">
             <div id="content-div">
-                <form name="upload_form" method="post" action="/upload">
+                <form name="upload_form" method="post" action="/upload" enctype="multipart/form-data">
                     <div id="file">
                         <input type="file" size="200px" name="file_upload" id="file_upload" required>
                         <label><span>Upload</span></label>
