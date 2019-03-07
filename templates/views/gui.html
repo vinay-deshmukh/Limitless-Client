@@ -22,12 +22,16 @@
                         console.log(data);
                         if(data == "100"){
                             clearInterval(id_get_progress);
-                        }
-                    });
+                    }
+                });
             
             }
+            document.getElementById("form_submit_btn").addEventListener("click", start_tracking_progress);
 
-            var id_get_progress = setInterval(get_progress, 400);
+            function start_tracking_progress(){
+                var id_get_progress = setInterval(get_progress, 400);
+            }
+            
 
             /*
             $('#upload_form').submit(function(e){
@@ -363,7 +367,7 @@
                         <input type="email" name="receivers" id="receivers" required>
                         <label>Email ID</label>
                     </div>
-                    <button type="submit">Submit</button>
+                    <button id="form_submit_btn" type="submit">Submit</button>
                     {% block progress %}
                     {% endblock %}
                 </form>
