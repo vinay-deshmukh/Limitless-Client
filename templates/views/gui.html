@@ -13,7 +13,7 @@
                 console.log(file_name);
                 $("#file_upload_name").val(file_name);
             });
-
+            
             function get_progress(){
                 console.log('getting progress');
                 $.post('/real_progress', {},
@@ -31,6 +31,7 @@
             function start_tracking_progress(){
                 var id_get_progress = setInterval(get_progress, 400);
             }
+
             
 
             /*
