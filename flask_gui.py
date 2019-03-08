@@ -62,7 +62,7 @@ def index():
 @app.route('/upload/progress', methods=['GET'])
 def progress():
 	return jsonify(progress=request.args.get('prog'))
-'''
+
 
 def start_upload(oauth_json, raw_args, receivers, data):
     main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
@@ -75,7 +75,7 @@ def start_upload(oauth_json, raw_args, receivers, data):
     if response.status_code == 200:
         messages = 'Successful'
         print('Login')
-
+'''
 
 
 
@@ -113,6 +113,8 @@ def upload():
         #file_path = os.path.abspath(file)
         raw_args = ['upload', file.filename]
 
+        main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
+
         json_str = None
         with open(file.filename +'.json', 'r') as f:
             json_str = f.read()
@@ -122,20 +124,12 @@ def upload():
             'json_str': json_str
         }
 
-        t1 = threading.Thread(target=start_upload, args=(oauth_json, raw_args, receivers, data))
-        # t2 = threading.Thread(target=get_progress)
-        print('a')
-        ####t1.start() # moving it wayy down
-        print('b')        
-        #### t2.start() # moving way down
-        print('c')
-        # t1.join() 
-        print('d')       
-        # t2.join()
-        
-        t1.start()
+        messages = 'failed'
+        response = requests.post(url=BASE_URL+'/upload', data=data)
+        if response.status_code == 200:
+        	messages = 'Successful'
         #print(get_status().percent())
-        return render_template('views/progress_bar.html', messages='ffff')
+        return render_template('views/progress_bar.html', messages=messages)
         #else:
             #prog = Progress().percent()
             #return jsonify(progress=prog)
