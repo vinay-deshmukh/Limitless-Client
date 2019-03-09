@@ -36,14 +36,20 @@ class Progress:
         return a + b
 
 
+
 # Global variable that will be updated as every progress message is printed
-LATEST_STATUS = Progress(1000, 1000, 1, 5) #0,10,1,100) # -1's indicate uninitialized
+LATEST_STATUS = Progress(0, 10, 1, 100) # -1's indicate uninitialized
 
 def set_status(cells_done, total_cells, 
                current_sheet, total_sheets):
     global LATEST_STATUS
     LATEST_STATUS = Progress(cells_done, total_cells, current_sheet, total_sheets)
     #print('In set_status():', LATEST_STATUS)
+
+
+def init_progress():
+	global LATEST_STATUS
+	LATEST_STATUS = Progress(0, 10, 1, 100)
 
 def get_status():
     '''
