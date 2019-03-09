@@ -6,7 +6,7 @@ import json
 import requests
 import hashlib
 import threading
-from sheet_disk.limitless import get_status
+from sheet_disk.limitless import get_status, init_progress
 
 '''
 sheet-disk@sheet-disk-230910.iam.gserviceaccount.com
@@ -128,6 +128,7 @@ def upload():
         response = requests.post(url=BASE_URL+'/upload', data=data)
         if response.status_code == 200:
         	messages = 'Successful'
+        init_progress()
         #print(get_status().percent())
         return render_template('views/progress_bar.html', messages=messages)
         #else:
