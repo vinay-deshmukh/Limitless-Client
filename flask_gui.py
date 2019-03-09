@@ -96,6 +96,14 @@ def real_progress():
     print('=' * 50)
     return str(a)
 
+@app.route('/download_progress', methods=['POST'])
+def download_progress():
+    print('=' * 50)
+    a = int(get_status().percent())
+    print('Progress:', a)
+    print('=' * 50)
+    return str(a)
+
 
 @app.route('/upload', methods=['POST', 'GET'])
 def upload():
@@ -155,7 +163,8 @@ def download():
         raw_args = ['download', all_files[id]['name'], 'crypt.json']
         main(oauth_json_string=oauth_json, raw_args=raw_args)
         messages = "successful"
-        return render_template('views/gui.html', messages=messages, all_files=all_files, len=len(all_files))
+        init_progress()
+        return render_template('views/progress_bar.html', messages=messages, all_files=all_files, len=len(all_files))
 
 
 @app.route('/register', methods=['POST', 'GET'])

@@ -5,6 +5,7 @@
     <title>Document</title>
     <link type="text/css" rel="stylesheet" href="static/css/bg.css">
     <link type="text/css" rel="stylesheet" href="static/css/login-signup.css">
+    <link type="text/css" rel="stylesheet" href="static/css/prog.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).on('ready',function(){
@@ -14,11 +15,13 @@
                 $("#file_upload_name").val(file_name);
             });
             
+            // UPLOAD PROGRESS
             function get_progress(){
                 console.log('getting progress');
                 $.post('/real_progress', {},
                     function(data, status, jqXHR){
                         $('#progress-id').attr("value", data);
+                        // $('#prog').html(data+'%');
                         console.log(data);
                         if(data == "100"){
                             clearInterval(id_get_progress);
@@ -31,6 +34,27 @@
             function start_tracking_progress(){
                 var id_get_progress = setInterval(get_progress, 400);
             }
+
+            //DOWNLOAD PROGRESS
+            function get_download_progress(){
+                console.log('getting progress');
+                $.post('/download_progress', {},
+                    function(data, status, jqXHR){
+                        $('#progress-id').attr("value", data);
+                        // $('#prog').html(data+'%');
+                        console.log(data);
+                        if(data == "100"){
+                            clearInterval(id_get_progress);
+                    }
+                });
+            }
+
+            document.getElementById("download_btn").addEventListener("click", start_tracking_progress_download);
+
+            function start_tracking_progress_download(){
+                var id_get_progress = setInterval(get_download_progress, 400);
+            }
+
 
             
 
@@ -343,7 +367,7 @@
                                 <tr>
                                     <td>
                                         {{ all_files[idx]['name'] }}
-                                        <button type="submit"></button>
+                                        <button id="download_btn" type="submit"></button>
                                     </td>
                                 </tr>
                             </form>
