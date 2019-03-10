@@ -121,7 +121,24 @@ def upload():
         #file_path = os.path.abspath(file)
         raw_args = ['upload', file.filename]
 
-        main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
+        receiver_client_emails = []
+        for email in receivers:
+            response = requests.post(url=BASE_URL + '/get_client', data={'user_email': email})
+            if response.status_code == 404:
+                # TODO: Catch this error
+                raise RuntimeError('{email} is not registered'.format(email))
+            else:
+                # 200
+                client_email = response.text.strip().replace('"', '')
+                print('Client email: ==%s==' % client_email)
+                print('Client email:', client_email, type(client_email))
+                receiver_client_emails.append(client_email)
+
+
+        #main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
+        main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receiver_client_emails)
+
+
 
         json_str = None
         with open(file.filename +'.json', 'r') as f:
