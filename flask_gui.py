@@ -77,8 +77,6 @@ def start_upload(oauth_json, raw_args, receivers, data):
         print('Login')
 '''
 
-
-
 def get_progress():
 	prog = 0
 	while True:

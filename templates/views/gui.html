@@ -49,11 +49,7 @@
                 });
             }
 
-            document.getElementById("download_btn").addEventListener("click", start_tracking_progress_download);
-
-            function start_tracking_progress_download(){
-                var id_get_progress = setInterval(get_download_progress, 400);
-            }
+            
 
 
             
@@ -366,8 +362,8 @@
                                 <input type="hidden" name="id" value={{idx}}>
                                 <tr>
                                     <td>
-                                        {{ all_files[idx]['name'] }}
-                                        <button id="download_btn" type="submit"></button>
+                                        <span>{{ all_files[idx]['name'] }}</span>
+                                        <button id="download_btn" type="submit" onclick="get_download_progress()"></button>
                                     </td>
                                 </tr>
                             </form>
