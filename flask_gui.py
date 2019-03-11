@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, Response, jsonify
+from flask import Flask, render_template, request, redirect, Response, jsonify, url_for, session
 import time
 import os
 import sys
@@ -25,38 +25,52 @@ from sheet_disk.sheet_disk import main
 oauth_json = None
 auth_dict = None
 all_files = None
+length_files = 0
 
 progress_bool = False
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+	if request.method == 'POST':
+		email = request.form['email']
+		session['email'] = email
+		password = request.form['password']
+		body = {
+			'user': email,
+			'pwd': hash_data(password)
+		}
+		response = requests.post(BASE_URL + '/login', json=body)
+		if response.status_code == 200:
+			global oauth_json
+			global auth_dict
+			auth_dict = response.json()
+			oauth_json = json.loads(response.json())['oauth_json_string']
+			print('Type: ', type(oauth_json))
+			response1 = requests.post(BASE_URL + '/get_files', data={'auth_dict': auth_dict})
+			global all_files
+			global length_files
+			all_files = json.loads(json.loads(response1.text))
+			length_files = len(all_files)
+
+			return redirect(url_for('index'))
+			#return render_template('views/progress_bar.html', all_files=all_files, len=len(all_files))
+		else:
+			print(response)
+			error = 'Not authenticated'
+			return render_template('views/login.html', error=error)
+		print('Login')
+	return render_template('views/login.html')
 
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
     print('index')
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        body = {
-            'user': email,
-            'pwd': hash_data(password)
-        }
-        response = requests.post(BASE_URL + '/login', json=body)
-        if response.status_code == 200:
-            global oauth_json
-            global auth_dict
-            auth_dict = response.json()
-            oauth_json = json.loads(response.json())['oauth_json_string']
-            print('Type: ', type(oauth_json))
-            response1 = requests.post(BASE_URL + '/get_files', data={'auth_dict': auth_dict})
-            global all_files
-            all_files = json.loads(json.loads(response1.text))
-
-            return render_template('views/progress_bar.html', all_files=all_files, len=len(all_files))
-        else:
-            print(response)
-            error = 'Not authenticated'
-            return render_template('views/login.html', error=error)
-        print('Login')
-    return render_template('views/login.html')
+    if 'email' in session:
+    	name = session['username']
+    	email = session['email']
+    	return render_template('views/progress_bar.html', all_files=all_files, len=length_files)
+    else:
+    	return redirect(url_for('login'))
 
 '''
 @app.route('/upload/progress', methods=['GET'])
@@ -76,8 +90,6 @@ def start_upload(oauth_json, raw_args, receivers, data):
         messages = 'Successful'
         print('Login')
 '''
-
-
 
 def get_progress():
 	prog = 0
@@ -121,7 +133,24 @@ def upload():
         #file_path = os.path.abspath(file)
         raw_args = ['upload', file.filename]
 
-        main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
+        receiver_client_emails = []
+        for email in receivers:
+            response = requests.post(url=BASE_URL + '/get_client', data={'user_email': email})
+            if response.status_code == 404:
+                # TODO: Catch this error
+                raise RuntimeError('{email} is not registered'.format(email))
+            else:
+                # 200
+                client_email = response.text.strip().replace('"', '')
+                print('Client email: ==%s==' % client_email)
+                print('Client email:', client_email, type(client_email))
+                receiver_client_emails.append(client_email)
+
+
+        #main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
+        main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receiver_client_emails)
+
+
 
         json_str = None
         with open(file.filename +'.json', 'r') as f:
@@ -138,7 +167,8 @@ def upload():
         	messages = 'Successful'
         init_progress()
         #print(get_status().percent())
-        return render_template('views/progress_bar.html', messages=messages)
+        return redirect(url_for('index'))
+        #return render_template('views/progress_bar.html', messages=messages)
         #else:
             #prog = Progress().percent()
             #return jsonify(progress=prog)
@@ -169,35 +199,37 @@ def download():
 
 @app.route('/register', methods=['POST', 'GET'])
 def signup():
-    print('signup')
-    if request.method == 'POST':
-        email = request.form['email']
-        pass1 = request.form['pass']
-        pass2 = request.form['pass1']
-        json_data = request.files['credentials']
-        print('Hello')
-        if pass1 == pass2:
-            try:
-                creds = json_data.read().decode('utf-8')
-                url = BASE_URL + '/register'
-                body = {
-                    'user': email,
-                    'pwd': hash_data(pass1),
-                    'json_oauth': creds
-                }
-                response = requests.post(url, json=body)
-                if response.status_code == 200:
-                    return redirect("/")
-                else:
-                    error = 'something went wrong'
-                    return render_template('views/signup.html', error=error)
-            except Exception as e:
-                print(e)
-                error = 'Not a json'
-                return render_template('views/signup.html', error=error)
-        print('Login')
-    return render_template('views/signup.html')
+	if request.method == 'POST':
+		username = request.form['username']
+		email = request.form['email']
+		pass1 = request.form['pass']
+		pass2 = request.form['pass1']
+		json_data = request.files['credentials']
+		print('Hello')
+		if pass1 == pass2:
+			try:
+				creds = json_data.read().decode('utf-8')
+				url = BASE_URL + '/register'
+				body = {
+					'user': email,
+					'pwd': hash_data(pass1),
+					'json_oauth': creds
+				}
+				response = requests.post(url, json=body)
+				if response.status_code == 200:
+					session['username'] = username
+					return redirect("/login")
+				else:
+					error = 'something went wrong'
+					return render_template('views/signup.html', error=error)
+			except Exception as e:
+				print(e)
+				error = 'Not a json'
+				return render_template('views/signup.html', error=error)
+		print('Login')
+	return render_template('views/signup.html')
 
 
 if __name__ == '__main__':
-    app.run(host=ROOT, port=PORT, debug=True)
+	app.secret_key = 'bmrv'
+	app.run(host=ROOT, port=PORT, debug=True)
