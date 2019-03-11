@@ -7,6 +7,8 @@
     <link type="text/css" rel="stylesheet" href="static/css/login-signup.css">
     <link type="text/css" rel="stylesheet" href="static/css/prog.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/loading-bar.css"/>
+    <script type="text/javascript" src="static/js/loading-bar.js"></script>
     <script type="text/javascript">
         $(document).on('ready',function(){
             $("#file_upload").change(function(){
@@ -48,42 +50,6 @@
                     }
                 });
             }
-
-            
-
-
-            
-
-            /*
-            $('#upload_form').submit(function(e){
-                e.preventDefault();
-
-                var interval = null;
-                var data = {
-                    'file_upload': $("#file_upload_name").val();
-                    'receivers': $("#receivers").val();
-                }
-                progress = setInterval(updateProgressBar, 1000);
-
-                function updateProgressBar(){
-                    $.ajax({
-                        type: 'POST',
-                        url: '/upload',
-                        data: data                        
-                    }).done(function(callback){
-                            console.log(callback);
-                            if (callback.written_content == "100"){
-                                clearInterval(progress);
-                            }
-                            // Watch out for Cross Site Scripting security issues when setting dynamic content!
-                            $('.progress-bar').css('width', callback.written_content+'%').attr('aria-valuenow', callback.written_content);
-                            $('.progress-bar-label').text(callback.written_content+'%');
-                            clearInterval(progress);
-                    }).fail(function(data){
-                            alert('error!');
-                    });
-                }
-            });*/
         });
     </script>
     <style type="text/css">
@@ -347,15 +313,6 @@
         <section id="left-section">
             <table>
                 <tbody>
-                    <tr>
-                        <td><span>File name</span><button><!-- download --></button></td>
-                    </tr>
-                    <tr>
-                        <td><span>File name</span><button><!-- download --></button></td>
-                    </tr>
-                    <tr>
-                        <td><span>File name</span><button type="submit" ><!-- download --></button></td>
-                    </tr>
                     {% if all_files %}
                         {% for idx in range(len) %}
                             <form method="get" action="/download">
