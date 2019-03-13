@@ -261,6 +261,25 @@
             background-color: rgba(255,200,202,1);
             transition: all 0.5s ease;
         }
+        button.logout{
+            /*margin: 16px calc(calc(100% - 160px) / 2) 0;*/
+            margin-left: 20%;
+            padding: 0 ;
+            width: 160px;
+            height: 56px;
+            border: none;
+            float: right;
+            opacity: 0.65;
+            color: #0C2E3A;
+            font-size: 24px; 
+            background-color: rgba(255,200,202,1);
+            transition: all 0.5s ease;
+        }
+        button.logout:hover{
+            opacity: 1.0;
+            transform: scale(1.05);
+            box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.25), -5px 5px 10px 0 rgba(0, 0, 0, 0.25);
+        }
         #right-section #content-div button:hover{
             opacity: 1.0;
             transform: scale(1.05);
@@ -299,13 +318,16 @@
     </style>
 </head>
 <body>
-    <div id="left-corner-design"></div>
+    <div id="left-corner-design">
+    </div>
     
     <header>
         <div id="header-content">
             <h1>Limitless</h1>
             <img src="static/assets/logo.svg">
+            <button class="logout"><a href="/logout">Logout</a></button>
         </div>
+        
     </header>
     <h2>Inbox</h2>
     

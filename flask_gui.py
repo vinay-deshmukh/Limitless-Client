@@ -33,7 +33,6 @@ progress_bool = False
 def login():
 	if request.method == 'POST':
 		email = request.form['email']
-		session['email'] = email
 		password = request.form['password']
 		body = {
 			'user': email,
@@ -51,7 +50,7 @@ def login():
 			global length_files
 			all_files = json.loads(json.loads(response1.text))
 			length_files = len(all_files)
-
+			session['email'] = email
 			return redirect(url_for('index'))
 			#return render_template('views/progress_bar.html', all_files=all_files, len=len(all_files))
 		else:
@@ -66,7 +65,6 @@ def login():
 def index():
     print('index')
     if 'email' in session:
-    	name = session['username']
     	email = session['email']
     	return render_template('views/progress_bar.html', all_files=all_files, len=length_files)
     else:
@@ -115,6 +113,13 @@ def download_progress():
     print('Progress:', a)
     print('=' * 50)
     return str(a)
+
+
+@app.route('/logout')
+def logout():
+   session.pop('username', None)
+   session.pop('email', None)
+   return redirect(url_for('index'))
 
 
 @app.route('/upload', methods=['POST', 'GET'])
@@ -217,7 +222,6 @@ def signup():
 				}
 				response = requests.post(url, json=body)
 				if response.status_code == 200:
-					session['username'] = username
 					return redirect("/login")
 				else:
 					error = 'something went wrong'
