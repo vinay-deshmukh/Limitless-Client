@@ -173,7 +173,7 @@ def upload():
         init_progress()
         #print(get_status().percent())
         return redirect(url_for('index'))
-        #return render_template('views/progress_bar.html', messages=messages)
+        #return render_template('views/progress_bar.html', messages=messages, all_files=all_files, len=length_files)
         #else:
             #prog = Progress().percent()
             #return jsonify(progress=prog)
