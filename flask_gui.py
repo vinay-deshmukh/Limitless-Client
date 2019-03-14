@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, Response, jsonify, url_for, session
+from flask import Flask, render_template, request, redirect, Response, jsonify, url_for, session, flash
 import time
 import os
 import sys
@@ -189,7 +189,7 @@ def upload():
         # copied from line 48
         
 
-
+        flash("File uploaded successfully")
         return redirect(url_for('index'))
         #return render_template('views/progress_bar.html', messages=messages, all_files=all_files, len=length_files)
         #else:
@@ -217,7 +217,10 @@ def download():
         main(oauth_json_string=oauth_json, raw_args=raw_args)
         messages = "successful"
         init_progress()
-        return render_template('views/progress_bar.html', messages=messages, all_files=all_files, len=len(all_files))
+        refresh_file_list()
+        flash("File downloaded successfully")
+        return redirect(url_for('index'))
+        # return render_template('views/progress_bar.html', messages=messages, all_files=all_files, len=len(all_files))
 
 
 @app.route('/register', methods=['POST', 'GET'])
