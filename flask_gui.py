@@ -29,6 +29,13 @@ length_files = 0
 
 progress_bool = False
 
+def refresh_file_list():
+    response1 = requests.post(BASE_URL + '/get_files', data={'auth_dict': auth_dict})
+    global all_files
+    global length_files
+    all_files = json.loads(json.loads(response1.text))
+    length_files = len(all_files)
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
 	if request.method == 'POST':
@@ -45,11 +52,9 @@ def login():
 			auth_dict = response.json()
 			oauth_json = json.loads(response.json())['oauth_json_string']
 			print('Type: ', type(oauth_json))
-			response1 = requests.post(BASE_URL + '/get_files', data={'auth_dict': auth_dict})
-			global all_files
-			global length_files
-			all_files = json.loads(json.loads(response1.text))
-			length_files = len(all_files)
+
+			refresh_file_list()
+			
 			session['email'] = email
 			return redirect(url_for('index'))
 			#return render_template('views/progress_bar.html', all_files=all_files, len=len(all_files))
@@ -172,6 +177,19 @@ def upload():
         	messages = 'Successful'
         init_progress()
         #print(get_status().percent())
+
+        # copied from line 48
+        # response1 = requests.post(BASE_URL + '/get_files', data={'auth_dict': auth_dict})
+        # global all_files
+        # global length_files
+        # all_files = json.loads(json.loads(response1.text))
+        # length_files = len(all_files)
+        refresh_file_list()
+
+        # copied from line 48
+        
+
+
         return redirect(url_for('index'))
         #return render_template('views/progress_bar.html', messages=messages, all_files=all_files, len=length_files)
         #else:
