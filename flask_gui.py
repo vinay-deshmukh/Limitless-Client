@@ -8,12 +8,7 @@ import hashlib
 import threading
 from sheet_disk.limitless import get_status, init_progress
 
-'''
-sheet-disk@sheet-disk-230910.iam.gserviceaccount.com
-'''
 
-sys.path.insert(0, "/home/rishabh/Downloads/Sheet-Disk-master")
-sheet_disk_path = '../sheet_disk/cli.py'
 app = Flask(__name__)
 
 ROOT = '127.0.0.2'
@@ -28,6 +23,8 @@ all_files = None
 length_files = 0
 
 progress_bool = False
+
+debug_print = print
 
 def refresh_file_list():
     response1 = requests.post(BASE_URL + '/get_files', data={'auth_dict': auth_dict})
@@ -158,6 +155,7 @@ def upload():
 
 
         #main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receivers)
+        debug_print(receiver_client_emails)
         main(oauth_json_string=oauth_json, raw_args=raw_args, email_list=receiver_client_emails)
 
 
@@ -190,6 +188,29 @@ def upload():
         
 
         flash("File uploaded successfully")
+
+        # BLOCKCHAIN CALL HERE-------------------------------------
+
+        for email in receiver_client_emails:
+            data = dict(file_name=file.filename, sender_name=session['email'], receiver_name=email, file_size='asd')
+            url = "http://127.0.0.3:5000/insert_blockchain"
+            r = requests.post(url=url, data=data)
+
+            result = []
+            debug_print(r.text)
+            
+        # BLOCKCHAIN CALL END's HERE-------------------------------------
+        # for dictionary in eval(r.text):
+        #     itemset = []
+        #     for key, value in dictionary.items():
+        #         itemset.append("<b>{}</b>: {}".format(key, value))
+        #     result.append("<br>".join(itemset))
+
+
+        # with open('del.html', 'w') as f:
+        #     f.write("<hr>".join(result))
+
+
         return redirect(url_for('index'))
         #return render_template('views/progress_bar.html', messages=messages, all_files=all_files, len=length_files)
         #else:
