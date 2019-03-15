@@ -1,0 +1,16 @@
+{% extends 'views/gui.html' %}
+
+{% block progress %}
+	<progress max="100" id="progress-id" name="progress-id" value=0></progress>
+	<!-- <div class="ldBar label-center" id="progress-id" name="progress-id" data-preset="line" data-value=0></div> -->
+	<!-- {% if messages %}
+        <div>
+            {{ messages }}
+        </div>
+    {% endif %} -->
+    
+		
+	{% for message in get_flashed_messages() %}
+		<div id="mssg" style="font-family: 'AvenirNext-Regular'; margin: auto; padding-left: 25%">{{ message }}</div>
+	{% endfor %}
+{% endblock %}

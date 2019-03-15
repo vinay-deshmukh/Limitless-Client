@@ -177,16 +177,18 @@ class SheetUpload:
             logger.debug('Creating sheet ' + str(sheet_no) + '/' + str(self.n_sheets) + '...')
             sh = self.gc.create(self.name + ' ' + str(sheet_no) + ' ' + right_now())
 
-            if self.email_list is None:
+            #if self.email_list is None:
+            if True:
                 # if not email_list is given, share with everyone
                 # Share the file so others can also access
                 logger.info('Sharing with everyone')
                 sh.share('None', 'anyone', 'reader')
             else:
+                pass
                 # Only share with given emails
-                logger.info('Sharing with selected people')
-                for email in self.email_list:
-                    sh.share(email, 'user', 'reader')
+                # logger.info('Sharing with selected people')
+                # for email in self.email_list:
+                #     sh.share(email, 'user', 'reader')
 
             self.last_key = sh.id
 

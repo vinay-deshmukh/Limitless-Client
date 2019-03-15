@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="29px" height="29px" viewBox="0 0 29 29" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.1 (72631) - https://sketchapp.com -->
+    <title>Asset 2</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Tablet" transform="translate(-395.000000, -496.000000)">
+            <g id="Asset-2" transform="translate(395.000000, 496.000000)">
+                <polygon id="Path" fill="#FFFFFF" fill-rule="nonzero" points="18.59 15.21 14.25 22.8 9.9 15.21"></polygon>
+                <rect id="Rectangle" fill="#FFFFFF" fill-rule="nonzero" x="13.09" y="4.12" width="2.33" height="12"></rect>
+                <circle id="Oval" stroke="#FFFFFF" cx="14.25" cy="14.25" r="13.75"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

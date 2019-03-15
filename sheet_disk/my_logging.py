@@ -12,7 +12,7 @@ class MyConsoleHandler(logging.StreamHandler):
     terminator = logging.StreamHandler.terminator
     @classmethod
     def change_terminator(cls, repl):
-        cls.terminator = repl
+        cls.terminator = '\n'
     @classmethod
     def restore_terminator(cls):
         cls.terminator = logging.StreamHandler.terminator
