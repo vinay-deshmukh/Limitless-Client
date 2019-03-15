@@ -67,8 +67,9 @@ def login():
 def index():
     print('index')
     if 'email' in session:
-    	email = session['email']
-    	return render_template('views/progress_bar.html', all_files=all_files, len=length_files)
+        email = session['email']
+        refresh_file_list()
+        return render_template('views/progress_bar.html', all_files=all_files, len=length_files)
     else:
     	return redirect(url_for('login'))
 
